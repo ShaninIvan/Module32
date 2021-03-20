@@ -88,6 +88,7 @@ function colorToClass(color) {
 }
 ```
 **Исправление:**
+
 Оптимальным решением будет использование Map:
 
 ```
@@ -103,3 +104,75 @@ function colorToClass(color) {
   return colorClasses.get(color);
 }
 ```
+### Соответствие принципу YAGNI:
+<span style="color: red">В исходной задаче не было требования создавать функцию "Добавить 100 случайных"</span>
+
+**Исправление:**
+
+<span style="color: green">Соответсвующие части кода удалены</span>
+
+### Соответствие принципам SOLID:
+<span style="color: red">Замечены случаи нарушения принципа единственной ответственности:</span>
+
+```
+filterButton.addEventListener('click', () => {
+  if ((isNaN(minWeight.value)) || (isNaN(maxWeight.value)) || (minWeight.value == "") || (maxWeight.value == "")) {
+    warning('Задайте минимальный и максимальный вес в виде целого числа');
+    return false;
+  }
+
+  filterFruits();
+  display();
+});
+```
+
+```
+addActionButton.addEventListener('click', () => {
+  if ((kindInput.value == "") || (weightInput.value == "")) {
+    warning('Заполните поля kind и weight');
+    return false;
+  }
+
+  addCard(kindInput.value, colorInput.value, weightInput.value);
+  display();
+});
+```
+
+**исправление:**
+
+<span style="color: green">Валидация полей вынесена в отдельные функции</span>
+
+```
+function validateFilter() {
+  if ((isNaN(minWeight.value)) || (isNaN(maxWeight.value)) || (minWeight.value == "") || (maxWeight.value == "")) {
+    warning('Задайте минимальный и максимальный вес в виде целого числа');
+    return false;
+  } else return true;
+}
+
+filterButton.addEventListener('click', () => {
+  if (validateFilter() === true) {
+    filterFruits();
+    display();
+  }
+});
+```
+
+```
+function validateAdd() {
+  if ((kindInput.value == "") || (weightInput.value == "")) {
+    warning('Заполните поля kind и weight');
+    return false;
+  } else return true;
+}
+
+addActionButton.addEventListener('click', () => {
+  if (validateAdd() === true) {
+    addCard(kindInput.value, colorInput.value, weightInput.value);
+    display();
+  }
+});
+```
+
+
+
